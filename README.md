@@ -12,6 +12,7 @@ As a bonus, it includes a fully-featured, interactive Graphical User Interface (
 ## 1. Project Overview
 
 In real-world tracking, sensors are flawed, and the underlying state of the world is hidden. 
+
 * Filtering estimates the present state based on evidence up to the present. 
 * Smoothing goes a step further: it delays the final estimation by a lag of L days, using the evidence from those L future days to mathematically correct and refine our belief about the past.
 
@@ -24,6 +25,7 @@ This codebase is designed with a strict separation of concerns. It decouples the
 
 
 ### The Umbrella World Concept
+
 We model a world with two hidden states: Rain and Sun. We cannot observe the weather directly; we only observe whether the director brings an umbrella or not. 
 
 ```mermaid
@@ -81,60 +83,8 @@ graph TD
     class Rain,Sun stateNode
     class Umbrella,NoUmbrella obsNode
     class Hidden_States,Observations groupBox
-
-* Transition Matrix (T): The probability of the weather changing from day to day.
-* Sensor Matrix (O): The probability of seeing an umbrella given the true weather.
-
-### The Core Mathematics
-
-Filtering (The Forward Algorithm):
-We compute the belief about the current state given all evidence so far. Let f_t be the forward message at day t.
-1. Prediction Step: Push yesterday's belief through the weather rules.
-2. Update Step: Filter the prediction through today's sensor evidence, applying a normalization constant.
-
-Smoothing (Fixed-Lag):
-We estimate the state at time t-L (where L is the lag) using evidence up to time t. 
-In our engine, this is broken down into an intuitive collision: The Forward Filter pushes our belief from the past up to Day t-L. Simultaneously, the Backward Transformer calculates a backward context vector (b) from the future window of evidence. Where they meet, we multiply them element-wise to get our perfectly smoothed, hindsight-corrected belief.
-
-
-
-```mermaid
-graph LR
-    %% Hidden States Timeline (The True Weather)
-    X_t_minus_2((Weather t-2)) -->|T Matrix| X_t_minus_1((Weather t-1))
-    X_t_minus_1 -->|T Matrix| X_t((Weather t))
-
-    %% Evidence (The Sensor Readings)
-    X_t_minus_2 -->|O Matrix| E_t_minus_2{{Evidence t-2}}
-    X_t_minus_1 -->|O Matrix| E_t_minus_1{{Evidence t-1}}
-    X_t -->|O Matrix| E_t{{Evidence t}}
-
-    %% Forward Math Flow (The 'f' vector)
-    f_prev[Previous Belief] -.->|ForwardFilter| X_t_minus_2
-    X_t_minus_2 -.->|Saved in deque| F_saved[(f history index 0)]
-    
-    %% Backward Math Flow (The 'b' vector)
-    B_start[Start b = 1.0, 1.0] -.-> X_t
-    X_t -.->|BackwardTransformer| X_t_minus_1
-    X_t_minus_1 -.->|BackwardTransformer| X_t_minus_2
-    X_t_minus_2 -.-> B_final[Calculated 'b']
-
-    %% Smoothing (The Collision)
-    F_saved ===> Combine((Multiply f * b))
-    B_final ===> Combine
-    Combine ===> Result[Smoothed Belief Day t-2]
-
-    %% Styling
-    classDef hidden fill:#4fc3f7,stroke:#01579b,stroke-width:2px,color:black,font-weight:bold
-    classDef obs fill:#ffe082,stroke:#ff8f00,stroke-width:2px,color:black
-    classDef math fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,stroke-dasharray: 5 5,color:black
-    classDef result fill:#ce93d8,stroke:#6a1b9a,stroke-width:3px,color:black,font-weight:bold
-
-    class X_t_minus_2,X_t_minus_1,X_t hidden
-    class E_t_minus_2,E_t_minus_1,E_t obs
-    class f_prev,F_saved,B_start,B_final math
-    class Combine,Result result
 ```
+
 ---
 
 ## 3. System Architecture (Technical Details)
@@ -142,6 +92,7 @@ graph LR
 The system relies on strict Object-Oriented principles, keeping the domain models cleanly separated from the mathematical engines.
 
 ### Package Dependencies (Component Architecture)
+
 The execution scripts act as assembly lines. The world package knows nothing about the algorithms operating on it.
 
 ```mermaid
@@ -196,6 +147,7 @@ flowchart TD
 ```
 
 ### Object-Oriented System Design
+
 The FixedLagSmoother acts as an orchestrator. Instead of being a monolithic mathematical script, it delegates forward math to ForwardFilter, backward math to BackwardTransformer, and memory management to the EvidenceWindow.
 
 ```mermaid
@@ -275,11 +227,12 @@ classDiagram
     HiddenMarkovModel *-- TransitionModel : contains
     HiddenMarkovModel *-- SensorModel : contains
 ```
+
 ### The Daily Processing Cycle
+
 Every single day, without fail, the system updates its present-day belief. If the evidence window is full, it executes the backward pass to rectify the past.
 
 ```mermaid
-
 flowchart TD
     %% Styling classes defined first
     classDef startEnd fill:#2e7d32,stroke:#1b5e20,stroke-width:2px,color:white,font-weight:bold
@@ -388,6 +341,7 @@ sequenceDiagram
     
     Smoother-->>Client: return result
 ```
+
 ---
 
 ## 4. Handling Numerical Stability (Practical Details)
@@ -405,20 +359,24 @@ total = np.sum(b_raw)
 if total > 0:
     b = b_raw / total
 ```
+
 ---
 
 ## 5. Installation & Usage
 
 ### Prerequisites
+
 * Python 3.8+
 * numpy (for mathematical matrix operations)
 * matplotlib (for GUI plotting)
 
 ### Installation
+
 Clone the repository and install the requirements using standard pip install commands:
 python -m pip install numpy matplotlib
 
 ### Running the CLI Simulation (Stress Test)
+
 To run the automated 35-day stress test script natively in the terminal, execute:
 
     python main.py
@@ -432,11 +390,13 @@ This runs a rigorous predefined sequence proving the engine's mathematical stabi
 While the engine is robust and strictly numerical, this repository includes a fully-featured Graphical User Interface (GUI) module. If you want to experience Fixed-Lag Smoothing in a user-friendly UI instead of reading terminal logs, running the GUI application is the way to go.
 
 ### How to Run the GUI
+
 To launch the interactive GUI, simply run:
 
     python app.py
 
 ### High-Level Structure and How it Works
+
 The GUI is built using Tkinter and Matplotlib, structured strictly around the Model-View-Controller (MVC) architectural pattern to ensure it does not interfere with the core mathematical engine.
 
 * The Model: The core mathematical Engine and World packages you interact with via the CLI.
@@ -444,5 +404,7 @@ The GUI is built using Tkinter and Matplotlib, structured strictly around the Mo
 * The Controller: The simulation_controller.py acts as the brain of the GUI. 
 
 When you start the simulation, the Controller initializes the FixedLagSmoother. As you feed evidence (Umbrella / No Umbrella) via the UI, the Controller passes this to the Engine. It then intercepts the calculated forward probabilities and smoothed backward probabilities, formats them, and broadcasts them to the Plotter and Log panels simultaneously. This allows you to visually watch the Forward Filter react in real-time, while the Smoothed Line trails L days behind, rectifying the past dynamically.
+
+```
 
 ```
