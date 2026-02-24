@@ -1,5 +1,6 @@
 # Umbrella World Fixed-Lag Smoothing Engine for Hidden Markov Models
 
+<img width="1920" height="969" alt="image" src="https://github.com/user-attachments/assets/61d4e436-d9d6-4917-bad9-a8d9718411c3" />
 
 A modular, mathematically stable, object-oriented Python engine for performing Fixed-Lag Smoothing in a Hidden Markov Model (HMM) environment. 
 
@@ -386,6 +387,13 @@ This runs a rigorous predefined sequence proving the engine's mathematical stabi
 ---
 
 ## 6. Bonus: The Interactive GUI Module
+
+<img width="1013" height="969" alt="image" src="https://github.com/user-attachments/assets/ee4fc142-5639-416b-af74-7690db998d2a" />  <img width="905" height="969" alt="image" src="https://github.com/user-attachments/assets/8f5a38d8-a1cb-440d-a654-3c623d592bc8" />
+
+
+
+<img width="1920" height="969" alt="image" src="https://github.com/user-attachments/assets/0107d182-487f-41d6-942f-0a40ae9eed01" />
+
 
 While the engine is robust and strictly numerical, this repository includes a fully-featured Graphical User Interface (GUI) module, unlike the rest of modules, **built with LLMs help for better experience.** If you want to experience Fixed-Lag Smoothing in a user-friendly UI instead of reading terminal logs, running the GUI application is the way to go.
 
