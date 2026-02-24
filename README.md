@@ -387,7 +387,7 @@ This runs a rigorous predefined sequence proving the engine's mathematical stabi
 
 ## 6. Bonus: The Interactive GUI Module
 
-While the engine is robust and strictly numerical, this repository includes a fully-featured Graphical User Interface (GUI) module. If you want to experience Fixed-Lag Smoothing in a user-friendly UI instead of reading terminal logs, running the GUI application is the way to go.
+While the engine is robust and strictly numerical, this repository includes a fully-featured Graphical User Interface (GUI) module, unlike the rest of modules, **built with LLMs help for better experience.** If you want to experience Fixed-Lag Smoothing in a user-friendly UI instead of reading terminal logs, running the GUI application is the way to go.
 
 ### How to Run the GUI
 
