@@ -1,6 +1,6 @@
 # Umbrella World Fixed-Lag Smoothing Engine for Hidden Markov Models
 
-```
+
 A modular, mathematically stable, object-oriented Python engine for performing Fixed-Lag Smoothing in a Hidden Markov Model (HMM) environment. 
 
 This project implements a robust algorithmic solution to the classic Umbrella World problem (from Russell & Norvig's Artificial Intelligence: A Modern Approach). It demonstrates how to update past beliefs based on future evidence while strictly preventing floating-point underflow (catastrophic cancellation) during extended time-series processing. 
@@ -81,7 +81,6 @@ graph TD
     class Rain,Sun stateNode
     class Umbrella,NoUmbrella obsNode
     class Hidden_States,Observations groupBox
-```
 
 * Transition Matrix (T): The probability of the weather changing from day to day.
 * Sensor Matrix (O): The probability of seeing an umbrella given the true weather.
